@@ -1,0 +1,38 @@
+/* src/pages/Reviews.css */
+.star-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  line-height: 1;
+  padding: 0 2px;
+}
+.star-btn.filled { color: var(--accent); }
+.star-btn:hover { transform: scale(1.15); color: var(--accent); }
+.star-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-left: 6px;
+}
+
+/* Shared: notification badge dot used in Requests tabs */
+.notif-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--red);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+  margin-left: 6px;
+}
