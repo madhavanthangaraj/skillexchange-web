@@ -76,9 +76,9 @@ export default function Login() {
             Don't have an account? <Link to="/register">Create one</Link>
           </p>
 
-          <div className="auth-demo">
+          {/* <div className="auth-demo">
             <p>Demo: alice@example.com / password123</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

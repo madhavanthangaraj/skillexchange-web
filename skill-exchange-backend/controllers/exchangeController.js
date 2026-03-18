@@ -58,10 +58,12 @@ const getMyRequests = async (req, res, next) => {
   try {
     const sent = await ExchangeRequest.find({ sender: req.user._id })
       .populate("receiver", "name email avatar rating skillsToTeach skillsToLearn")
+      .populate("sender", "name email avatar rating skillsToTeach skillsToLearn")
       .sort({ createdAt: -1 });
 
     const received = await ExchangeRequest.find({ receiver: req.user._id })
       .populate("sender", "name email avatar rating skillsToTeach skillsToLearn")
+      .populate("receiver", "name email avatar rating skillsToTeach skillsToLearn")
       .sort({ createdAt: -1 });
 
     res.status(200).json({ success: true, sent, received });

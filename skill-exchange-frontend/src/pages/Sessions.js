@@ -197,10 +197,13 @@ export default function Sessions() {
                       onChange={e => setForm({ ...form, exchangeRequestId: e.target.value })} required>
                       <option value="">Select an accepted exchange</option>
                       {acceptedExchanges.map(ex => {
-                        const partner = ex.sender?.name && ex.receiver?.name
-                          ? `${ex.sender.name} ↔ ${ex.receiver.name} (${ex.senderSkill} ⇄ ${ex.receiverSkill})`
-                          : ex._id;
-                        return <option key={ex._id} value={ex._id}>{partner}</option>;
+                        let partnerLabel = "";
+                        if (ex.sender?.name && ex.receiver?.name) {
+                          partnerLabel = `${ex.sender.name} ↔ ${ex.receiver.name} (${ex.senderSkill} ⇄ ${ex.receiverSkill})`;
+                        } else {
+                          partnerLabel = `Unknown Partner (${ex.senderSkill} ⇄ ${ex.receiverSkill})`;
+                        }
+                        return <option key={ex._id} value={ex._id}>{partnerLabel}</option>;
                       })}
                     </select>
                     {acceptedExchanges.length === 0 && (

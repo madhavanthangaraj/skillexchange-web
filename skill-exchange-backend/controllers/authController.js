@@ -11,6 +11,12 @@ const register = async (req, res, next) => {
   try {
     const { name, email, password, bio, skillsToTeach, skillsToLearn } = req.body;
 
+    // Email validation: must be a valid email and not from example.com
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if (!emailRegex.test(email) || email.endsWith('@example.com')) {
+      return res.status(400).json({ success: false, message: "Please enter a valid, non-example.com email address" });
+    }
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -27,12 +33,13 @@ const register = async (req, res, next) => {
       skillsToLearn: skillsToLearn || [],
     });
 
-    const token = generateToken(user._id);
+    // TODO: Send email verification here (simulate for now)
+    // In a real app, you would send an email with a verification link/token
+    // For demo, just show a message
 
     res.status(201).json({
       success: true,
-      message: "Registration successful",
-      token,
+      message: "Registration successful. Please check your email to verify your account.",
       user: {
         _id: user._id,
         name: user.name,
@@ -45,6 +52,10 @@ const register = async (req, res, next) => {
       },
     });
   } catch (error) {
+    // Handle Mongoose password validation error with a user-friendly message
+    if (error.name === 'ValidationError' && error.errors && error.errors.password) {
+      return res.status(400).json({ success: false, message: 'Invalid password. Password must be at least 6 characters.' });
+    }
     next(error);
   }
 };

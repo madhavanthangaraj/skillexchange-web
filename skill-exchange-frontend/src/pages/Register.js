@@ -25,11 +25,18 @@ export default function Register() {
         skillsToLearn: form.skillsToLearn.split(',').map(s => s.trim()).filter(Boolean),
       };
       const res = await authAPI.register(payload);
+      toast.success(res.data.message || 'Account created successfully!');
       login(res.data.user, res.data.token);
-      toast.success('Account created successfully!');
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration failed');
+      // Always show a user-friendly error for password issues
+      if (err.response?.data?.errors?.password) {
+        toast.error('Invalid password. Password must be at least 6 characters.');
+      } else if (err.response?.data?.message) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error('Registration failed');
+      }
     } finally {
       setLoading(false);
     }

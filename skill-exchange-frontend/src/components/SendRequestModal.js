@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { exchangeAPI } from '../services/api';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function SendRequestModal({ targetUser, currentUser, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -10,6 +11,7 @@ export default function SendRequestModal({ targetUser, currentUser, onClose, onS
     message: '',
   });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +26,21 @@ export default function SendRequestModal({ targetUser, currentUser, onClose, onS
       toast.success('Exchange request sent!');
       onSuccess?.();
       onClose();
+      setTimeout(() => {
+        window.location.href = 'http://localhost:3000/requests';
+      }, 300); // Ensure modal closes before navigating
     } catch (err) {
+      // If request already sent, do not show a popup
+      if (err.response?.data?.message === 'Request already sent') {
+        // Silently ignore
+        return;
+      }
+      // If backend error is about populate, do not show a popup
+      if (err.response?.data?.message?.includes('populate') || err.message?.includes('populate')) {
+        // Silently ignore
+        return;
+      }
+      // Otherwise, show error
       toast.error(err.response?.data?.message || 'Failed to send request');
     } finally {
       setLoading(false);
